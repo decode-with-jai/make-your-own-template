@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative Mockup Platform | College Project</title>
+  <meta name="description" content="A responsive single-page mockup platform website inspired by premium creative marketplaces, built with HTML, CSS and JavaScript." />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #f3f3f4;
+      --surface-2: #f7f7f8;
+      --text: #161616;
+      --muted: #5f6368;
+      --line: #e8e8ea;
+      --shadow: 0 15px 40px rgba(18, 18, 18, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --purple: #7a2ef5;
+      --green: #5bc200;
+      --pink: #eba8ac;
+      --gold: #c8a46a;
+      --teal: #77cbc7;
+      --black: #050505;
+      --container: min(1380px, calc(100% - 32px));
+      --transition: 220ms ease;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(122, 46, 245, 0.35);
+      outline-offset: 3px;
+      border-radius: 12px;
+    }
+
+    .container { width: var(--container); margin-inline: auto; }
+
+    .topbar {
+      background: var(--black);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,.2);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 84px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-main { font-size: 3rem; font-style: italic; line-height: 0.9; }
+    .brand-sub { font-size: .95rem; color: #b8c0cc; margin-bottom: 8px; }
+
+    .nav-area {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .desktop-nav,
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .desktop-nav a,
+    .nav-actions a,
+    .menu-btn {
+      color: white;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .desktop-nav a:hover,
+    .nav-actions a:hover,
+    .menu-btn:hover {
+      background: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+    }
+
+    .pill-btn {
+      background: var(--green);
+      color: white !important;
+      border-radius: 14px;
+      padding: 14px 22px !important;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.15);
+    }
+
+    .more-chip,
+    .menu-btn {
+      width: 48px;
+      height: 48px;
+      display: inline-grid;
+      place-items: center;
+      border: 0;
+      background: rgba(255,255,255,.08);
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .menu-btn { display: none; }
+
+    .search-shell {
+      background: var(--black);
+      padding-bottom: 22px;
+    }
+
+    .search-bar {
+      display: grid;
+      grid-template-columns: 240px 1fr 68px;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .search-bar select,
+    .search-bar input,
+    .search-bar button {
+      border: 0;
+      min-height: 62px;
+    }
+
+    .search-bar select {
+      padding: 0 24px;
+      border-right: 1px solid var(--line);
+      background: white;
+    }
+
+    .search-bar input {
+      padding: 0 24px;
+      color: var(--text);
+      font-size: 1.05rem;
+    }
+
+    .search-bar button {
+      background: linear-gradient(180deg, #8f31ff 0%, #6818e8 100%);
+      color: white;
+      font-size: 1.45rem;
+      cursor: pointer;
+      transition: filter var(--transition), transform var(--transition);
+    }
+
+    .search-bar button:hover { filter: brightness(1.08); }
+
+    main section { padding: 56px 0; }
+
+    .hero {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 36px;
+      min-height: 560px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #f4f0ff;
+      color: var(--purple);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    h1 { font-size: clamp(2.9rem, 6vw, 5rem); }
+    h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); }
+    h3 { font-size: clamp(1.35rem, 2vw, 1.85rem); }
+
+    .gradient-text {
+      color: var(--purple);
+      display: block;
+      margin-top: 10px;
+    }
+
+    .hero-copy p,
+    .split-copy p,
+    .footer-mini p { font-size: clamp(1.08rem, 2vw, 1.45rem); color: #39414a; max-width: 36ch; }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 60px;
+      padding: 0 28px;
+      border-radius: 16px;
+      font-weight: 800;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      border: 0;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--green); color: white; box-shadow: 0 14px 24px rgba(91, 194, 0, .22); }
+    .btn-secondary { background: white; color: var(--text); border: 1px solid var(--line); }
+    .btn-gold { background: var(--gold); color: white; }
+    .btn-pink { background: var(--pink); color: white; }
+    .btn-purple { background: #8e5ad8; color: white; }
+    .btn-teal { background: var(--teal); color: white; }
+
+    .hero-collage {
+      position: relative;
+      min-height: 530px;
+      isolation: isolate;
+    }
+
+    .hero-collage::before {
+      content: "";
+      position: absolute;
+      inset: 24px 24px 24px 18px;
+      border-radius: 40px;
+      background: radial-gradient(circle at top right, rgba(142, 90, 216, .13), rgba(255,255,255,0) 38%), linear-gradient(180deg, #fafafa, #f3f3f5);
+      z-index: -1;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 18px 30px rgba(0,0,0,.12);
+      background: white;
+      border: 1px solid rgba(0,0,0,.04);
+    }
+
+    .floating-card .thumb {
+      height: 100%;
+      min-height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      padding: 16px;
+      text-align: center;
+      text-transform: uppercase;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-a { width: 170px; height: 220px; top: 0; left: 25px; transform: rotate(-8deg); }
+    .card-b { width: 170px; height: 245px; top: 14px; left: 225px; transform: rotate(4deg); }
+    .card-c { width: 180px; height: 210px; top: 14px; right: 40px; transform: rotate(8deg); }
+    .card-d { width: 170px; height: 250px; top: 208px; left: 30px; transform: rotate(-6deg); }
+    .card-e { width: 178px; height: 320px; top: 235px; left: 220px; transform: rotate(7deg); }
+    .card-f { width: 180px; height: 210px; top: 248px; right: 46px; transform: rotate(6deg); }
+    .card-g { width: 190px; height: 130px; bottom: 14px; left: 90px; transform: rotate(-5deg); }
+    .card-h { width: 175px; height: 145px; bottom: 18px; right: 18px; transform: rotate(5deg); }
+
+    .bg-1 { background: linear-gradient(180deg, rgba(255,255,255,.15), rgba(0,0,0,.15)), url('assets/dress.jpg'); }
+    .bg-2 { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.2)), url('assets/dress-2.jpg'); }
+    .bg-3 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.18)), url('assets/dress-3.png'); }
+    .bg-4 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.25)), url('assets/dress-4.png'); }
+    .bg-5 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22)), url('assets/dress-5.png'); }
+    .bg-6 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.14)), url('assets/dress-6.jpg'); }
+    .bg-7 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.18)), url('assets/dress-7.jpg'); }
+    .bg-8 { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.15)), url('assets/dress-8.jpg'); }
+
+    .categories {
+      padding-top: 18px;
+      overflow: hidden;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .category-card {
+      background: white;
+      border: 1px solid #ececef;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .category-card:hover { transform: translateY(-4px); box-shadow: 0 20px 35px rgba(0,0,0,.09); }
+
+    .category-media {
+      aspect-ratio: 1.25 / 1;
+      position: relative;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .category-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 20%, rgba(0,0,0,.12) 100%);
+    }
+
+    .category-card h3 {
+      font-size: 1.9rem;
+      padding: 26px 18px 24px;
+      letter-spacing: -0.045em;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .section-head p { margin: 0; color: var(--muted); max-width: 42ch; }
+
+    .masonry {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .m-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition);
+      min-height: 200px;
+      position: relative;
+    }
+
+    .m-card:hover { transform: translateY(-3px); }
+
+    .m-card .m-bg {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 18px;
+    }
+
+    .m-card .m-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18));
+    }
+
+    .m-label {
+      position: relative;
+      z-index: 1;
+      color: white;
+      font-weight: 800;
+      background: rgba(17,17,17,.56);
+      backdrop-filter: blur(8px);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: .92rem;
+    }
+
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .tall-1 { min-height: 240px; }
+    .tall-2 { min-height: 320px; }
+    .tall-3 { min-height: 410px; }
+
+    .split-band {
+      background: var(--surface);
+      margin: 34px 0;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .split.reverse .split-copy { order: 2; }
+    .split.reverse .split-media { order: 1; }
+
+    .split-media {
+      border-radius: 30px;
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,.05);
+      min-height: 300px;
+    }
+
+    .split-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .split-copy p { margin: 24px 0 30px; }
+
+    .footer {
+      background: var(--black);
+      color: white;
+      padding-top: 30px;
+      margin-top: 18px;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      flex-wrap: wrap;
+    }
+
+    .quick-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.15rem;
+      color: #f0f0f0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding: 50px 0;
+    }
+
+    .footer-grid h3 {
+      font-size: 1.35rem;
+      margin-bottom: 18px;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 14px;
+      color: #ebebeb;
+    }
+
+    .footer-grid a { color: #ececec; }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0 26px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .socials a {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      display: inline-grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .legal {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: #e1e1e1;
+    }
+
+    .mobile-panel {
+      display: none;
+      background: #111;
+      padding: 0 16px 16px;
+    }
+
+    .mobile-panel nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mobile-panel a {
+      padding: 14px 14px;
+      border-radius: 14px;
+      color: white;
+      background: rgba(255,255,255,.05);
+    }
+
+    @media (max-width: 1200px) {
+      .cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero-grid, .split { grid-template-columns: 1fr; }
+      .hero-collage { min-height: 560px; }
+      .split.reverse .split-copy,
+      .split.reverse .split-media { order: initial; }
+    }
+
+    @media (max-width: 980px) {
+      .desktop-nav, .nav-actions .desktop-only, .more-chip { display: none; }
+      .menu-btn { display: inline-grid; }
+      .nav-actions { margin-left: auto; }
+      .search-bar { grid-template-columns: 1fr; }
+      .search-bar select { border-right: 0; border-bottom: 1px solid var(--line); }
+      .search-bar button { min-height: 58px; }
+      .masonry { grid-template-columns: repeat(6, 1fr); }
+      .span-7, .span-8, .span-6, .span-5, .span-4, .span-3 { grid-column: span 6; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .mobile-panel.open { display: block; }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner { min-height: 74px; }
+      .brand-main { font-size: 2.25rem; }
+      .brand-sub { font-size: .8rem; margin-bottom: 5px; }
+      .cards-grid, .footer-grid, .masonry { grid-template-columns: 1fr; }
+      .span-7, .span-8, .span-6, .span-5, .span-4, .span-3 { grid-column: auto; }
+      .section-head { align-items: start; flex-direction: column; }
+      .hero-grid { min-height: auto; gap: 24px; }
+      .hero-collage {
+        min-height: 380px;
+        transform: scale(.88);
+        transform-origin: top center;
+      }
+      .floating-card { border-radius: 20px; }
+      .card-a { width: 118px; height: 150px; left: 6px; }
+      .card-b { width: 120px; height: 175px; left: 130px; }
+      .card-c { width: 118px; height: 145px; right: 6px; }
+      .card-d { width: 118px; height: 160px; top: 142px; left: 0; }
+      .card-e { width: 128px; height: 210px; top: 164px; left: 126px; }
+      .card-f { width: 120px; height: 145px; top: 170px; right: 0; }
+      .card-g { width: 135px; height: 100px; left: 44px; }
+      .card-h { width: 122px; height: 100px; right: 18px; }
+      .btn { width: 100%; }
+      .hero-copy p, .split-copy p { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" aria-label="Main header">
+    <div class="container topbar-inner">
+      <a href="#home" class="brand" aria-label="Creative platform home">
+        <span class="brand-main">Make Your Own</span>
+        <span class="brand-sub"></span>
+      </a>
+
+      <div class="nav-area">
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#mockups">Mockups ▾</a>
+          <a href="#designs">Designs ▾</a>
+          <a href="#logos">Logos ▾</a>
+          <button class="more-chip" aria-label="More options">•••</button>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="desktop-only" href="#pricing">Pricing</a>
+          <a class="pill-btn desktop-only" href="#start">Go Unlimited!</a>
+          <a class="desktop-only" href="#account">Free Account</a>
+          <a class="desktop-only" href="#login">Log In</a>
+          <button class="menu-btn" id="menuToggle" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open navigation menu">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-panel" id="mobilePanel">
+      <nav aria-label="Mobile navigation">
+        <a href="#mockups">Mockups</a>
+        <a href="#designs">Designs</a>
+        <a href="#logos">Logos</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#start">Go Unlimited!</a>
+        <a href="#account">Free Account</a>
+        <a href="#login">Log In</a>
+      </nav>
+    </div>
+
+    <div class="search-shell">
+      <div class="container">
+        <form class="search-bar" role="search" aria-label="Search creative templates">
+          <label class="sr-only" for="category">Choose category</label>
+          <select id="category" aria-label="Choose category">
+            <option>All Categories</option>
+            <option>Mockups</option>
+            <option>Designs</option>
+            <option>Logos</option>
+            <option>Videos</option>
+          </select>
+
+          <label class="sr-only" for="site-search">Search mockups, logos and templates</label>
+          <input id="site-search" type="search" placeholder="Search Mockups, Logos, Design Templates, Text Animations, Instagram Stories, Flyers..." />
+
+          <button type="submit" aria-label="Search site">⌕</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">✨ Modern creative toolkit</div>
+          <h1>
+            Your Creative Journey
+            <span class="gradient-text">Starts Here</span>
+          </h1>
+          <p>Sell more merch with 160k+ mockups tailored for POD sellers, content creators, entrepreneurs and growing online brands.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#start">Start Creating!</a>
+            <a class="btn btn-secondary" href="#discover">Explore Templates</a>
+          </div>
+        </div>
+
+        <div class="hero-collage" aria-label="Creative collage of templates and mockups">
+          <article class="floating-card card-a"><div class="thumb bg-1">Sage Soul</div></article>
+          <article class="floating-card card-b"><div class="thumb bg-2">Upload Your Image</div></article>
+          <article class="floating-card card-c"><div class="thumb bg-3">Sphinxes</div></article>
+          <article class="floating-card card-d"><div class="thumb bg-4">Pet Merch</div></article>
+          <article class="floating-card card-e"><div class="thumb bg-5">Event Poster</div></article>
+          <article class="floating-card card-f"><div class="thumb bg-6">Creative Bacon</div></article>
+          <article class="floating-card card-g"><div class="thumb bg-7">Duke's</div></article>
+          <article class="floating-card card-h"><div class="thumb bg-8">Venus in Virgo</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories" id="discover">
+      <div class="container">
+        <div class="cards-grid">
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/Spring.jpg'); background-position: left center;"></div>
+            <h3>Spring</h3>
+          </article>
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/social\ media.jpg'); background-position: 20% center;"></div>
+            <h3>Made for Socials</h3>
+          </article>
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/T-Shirts.jpg'); background-position: 40% center;"></div>
+            <h3>T-Shirts</h3>
+          </article>
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/mockup.jpg'); background-position: 58% center;"></div>
+            <h3>Mockups for Etsy</h3>
+          </article>
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/apperal\ brand.jpg'); background-position: 77% center;"></div>
+            <h3>Apparel Brands</h3>
+          </article>
+          <article class="category-card">
+            <div class="category-media" style="background-image:url('assets/mug\ &\ cup.jpg'); background-position: right center;"></div>
+            <h3>Mugs &amp; Drinkware</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="mockups">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">🖼️ Best selling layouts</div>
+            <h2>Featured Mockup Gallery</h2>
+          </div>
+          <p>A masonry-style showcase inspired by premium design marketplaces. Built to feel rich, visual and highly browsable across desktop, tablet and mobile.</p>
+        </div>
+
+        <div class="masonry">
+          <article class="m-card span-3 tall-3"><div class="m-bg" style="background-image:url('assets/dress.jpg'); background-position:left top;"><span class="m-label">Womens</span></div></article>
+          <article class="m-card span-3 tall-1"><div class="m-bg" style="background-image:url('assets/dress-2.jpg'); background-position:18% top;"><span class="m-label">Girls</span></div></article>
+          <article class="m-card span-4 tall-2"><div class="m-bg" style="background-image:url('assets/dress-3.png'); background-position:36% top;"><span class="m-label">Trend</span></div></article>
+          <article class="m-card span-3 tall-2"><div class="m-bg" style="background-image:url('assets/dress-4.png'); background-position:68% top;"><span class="m-label">Top Less
+          </span></div></article>
+          <article class="m-card span-3 tall-2"><div class="m-bg" style="background-image:url('assets/dress-5.jpg'); background-position:left 45%;"><span class="m-label">Cut Sleeves</span></div></article>
+          <article class="m-card span-3 tall-2"><div class="m-bg" style="background-image:url('assets/dress-6.jpg'); background-position:28% 50%;"><span class="m-label">Shirt</span></div></article>
+          <article class="m-card span-3 tall-2"><div class="m-bg" style="background-image:url('assets/dress-7.jpg'); background-position:57% 57%;"><span class="m-label">Trend</span></div></article>
+          <article class="m-card span-3 tall-2"><div class="m-bg" style="background-image:url('assets/dress-8.jpg'); background-position:87% 56%;"><span class="m-label">Half Shirt</span></div></article>
+          <article class="m-card span-4 tall-1"><div class="m-bg" style="background-image:url('assets/dress-9.jpg'); background-position:20% bottom;"><span class="m-label">Casual</span></div></article>
+          <article class="m-card span-4 tall-1"><div class="m-bg" style="background-image:url('assets/dress-10.jpg'); background-position:50% bottom;"><span class="m-label">Formal</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="split-band" id="designs">
+      <div class="container split">
+        <div class="split-copy">
+          <div class="eyebrow">🎨 Free templates</div>
+          <h2>Thousands of Free Templates Just for You!</h2>
+          <p>The easiest way to create professional designs for free. Browse an ever-changing library of mockups, social visuals, logos and promotional layouts.</p>
+          <a class="btn btn-gold" href="#start">Start Creating for Free</a>
+        </div>
+        <div class="split-media">
+          <img src="assets/templates-reference.jpg" alt="Template section preview on light background" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split reverse">
+        <div class="split-copy">
+          <div class="eyebrow">🧩 Product shots</div>
+          <h2>The Largest Collection of Mockups on the Internet!</h2>
+          <p>Drag and drop your designs into polished mockups to create beautiful product shots for websites, marketplaces, ads and social campaigns.</p>
+          <a class="btn btn-pink" href="#mockups">Check Out our Mockup Library</a>
+        </div>
+        <div class="split-media">
+          <img src="assets/mockup-library-reference.jpg" alt="Mockup editing experience shown on laptop and mobile" />
+        </div>
+      </div>
+    </section>
+
+    <section class="split-band">
+      <div class="container split">
+        <div class="split-copy">
+          <div class="eyebrow">🎮 Gaming creator tools</div>
+          <h2>Create Your Own Gaming Designs in No Time</h2>
+          <p>Everything you need to brand your Twitch stream or YouTube channel is right here so you can launch better looking graphics faster.</p>
+          <a class="btn btn-purple" href="#start">Start with a Gaming Logo</a>
+        </div>
+        <div class="split-media">
+          <img src="assets/gaming-reference.jpg" alt="Gaming template artwork shown on a controller-shaped frame" />
+        </div>
+      </div>
+    </section>
+
+    <section id="logos">
+      <div class="container split reverse">
+        <div class="split-copy">
+          <div class="eyebrow">🪄 Brand identity</div>
+          <h2>Make a Free Logo for Your Business</h2>
+          <p>Create a professional logo design using ready-made templates. Explore thousands of options across industries, styles and business categories.</p>
+          <a class="btn btn-teal" href="#start">Make a Logo</a>
+        </div>
+        <div class="split-media">
+          <img src="assets/logo-reference.jpg" alt="Floating logo cards displayed in perspective" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <a class="quick-link" href="#home">Quick Links ▾</a>
+        <a class="quick-link" href="#discover">More from Placeit</a>
+      </div>
+
+      <div class="footer-grid">
+        <section>
+          <h3>Placeit</h3>
+          <ul>
+            <li><a href="#account">Free Account</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#license">License</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Help</h3>
+          <ul>
+            <li><a href="#contact">Contact Us / FAQs</a></li>
+            <li><a href="#affiliate">Affiliate</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>AI Tools</h3>
+          <ul>
+            <li><a href="#cropper">Free Image Cropper</a></li>
+            <li><a href="#gif">Free Video to Gif Converter</a></li>
+            <li><a href="#video-cropper">Free Video Cropper</a></li>
+            <li><a href="#bg-remover">Free Background Remover</a></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-brand">
+          <a href="#home" class="brand" aria-label="Creative platform home footer">
+            <span class="brand-main">Make Your Own</span>
+            <span class="brand-sub"></span>
+          </a>
+          <div class="socials" aria-label="Social links">
+            <a href="#facebook" aria-label="Facebook">f</a>
+            <a href="#x" aria-label="X">𝕏</a>
+            <a href="#instagram" aria-label="Instagram">◎</a>
+            <a href="#tiktok" aria-label="TikTok">♪</a>
+            <a href="#youtube" aria-label="YouTube">▶</a>
+            <a href="#pinterest" aria-label="Pinterest">P</a>
+          </div>
+        </div>
+
+        <div class="legal">
+          <a href="#terms">Terms of Use</a>
+          <a href="#cookies">Cookies</a>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#do-not-sell">Do not sell or share my personal information</a>
+          <span>2025 All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('menuToggle');
+    const panel = document.getElementById('mobilePanel');
+
+    toggle.addEventListener('click', () => {
+      const isOpen = panel.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      toggle.textContent = isOpen ? '✕' : '☰';
+    });
+
+    document.querySelectorAll('.mobile-panel a').forEach(link => {
+      link.addEventListener('click', () => {
+        panel.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.textContent = '☰';
+      });
+    });
+
+    document.querySelector('.search-bar').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const term = document.getElementById('site-search').value.trim();
+      if (term) {
+        alert(`Demo search for: ${term}`);
+      } else {
+        alert('Please type something to search.');
+      }
+    });
+  </script>
+</body>
+</html>
